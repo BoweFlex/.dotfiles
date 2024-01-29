@@ -1,0 +1,9 @@
+alias jsession="~/.local/scripts/jbowe-sessionizer"
+alias vim="vimpwd"
+function vimpwd () {
+    if [[ $1 ]]; then
+        nvim $1
+    else
+        nvim .
+    fi
+}

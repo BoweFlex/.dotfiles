@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# My goal is to create a "better" tmux list-session, which will provide a popup using
+# fzf-tmux and allow you to search through your current sessions.
+
+#if tmux list-sessions &>/dev/null; then
+#    >&2 echo "There are no active tmux sessions!"
+#    exit 2
+#fi
+
+if [ "$TMUX" ]; then # inside tmux
+    RUNTYPE="attached"
+else # outside tmux, fzf-tmux not an option
+    RUNTYPE="detached"
+fi
+
+get_current_sessions() {
+    tmux list-sessions -F '#{session_last_attached} #{session_name}' | sort --numeric-sort --reverse | awk '{print $2}'
+}
+
+BORDER_LABEL="JBOWE SESSION FINDER"
+PROMPT=" "
+
+case $RUNTYPE in
+    attached)
+        FZF_TMUX_OPTS="-p 53%,58%"
+        RESULT=$(
+        # For some reason I can't specify border label for fzf-tmux
+            (get_current_sessions) | fzf-tmux \
+                --no-sort \
+                --prompt "$PROMPT"\
+                $FZF_TMUX_OPTS
+        )
+        ;;
+    detached)
+        RESULT=$(
+            (get_current_sessions) | fzf \
+                --border \
+                --border-label "$BORDER_LABEL" \
+                --no-sort \
+                --prompt "$PROMPT" \
+        )
+        ;;
+esac
+
+if [ "$RESULT" = "" ]; then # no result
+    exit 0
+else 
+    SESSION_NAME=$(basename "$RESULT" | tr ' .:' '_')
+    SESSION=$(tmux list-sessions -F '#S' | grep "^$SESSION_NAME$") # find selected session
+    case $RUNTYPE in
+        attached)
+            tmux switch-client -t "$SESSION"
+            ;;
+        detached)
+            tmux attach -t "$SESSION"
+            ;;
+    esac
+fi

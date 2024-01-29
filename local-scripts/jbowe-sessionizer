@@ -1,0 +1,68 @@
+#!/bin/bash
+
+if [[ $TMUX ]]; then # inside tmux
+    RUNTYPE="attached"
+else # outside tmux, fzf-tmux not an option
+    RUNTYPE="detached"
+fi
+
+get_current_sessions() {
+    tmux list-sessions -F '#{session_last_attached} #{session_name}' | sort --numeric-sort --reverse | awk '{print $2}'
+}
+
+get_common_directories() {
+    find ~/ ~/boweflex ~/wssgit ~/wssgit/jbowe ~/wssgit/web-ops ~/wssgit/web-ops/kubernetes-projects ~/wssgit/web-ops/kubernetes-projects/clark-apps ~/.local -mindepth 1 -maxdepth 1 -type d
+}
+
+BORDER_LABEL="JBOWE SESSION FINDER"
+PROMPT=" "
+
+if [[ $# -eq 1 ]]; then
+    RESULT=$1
+else
+    case $RUNTYPE in
+        attached)
+            FZF_TMUX_OPTS="-p 53%,58%"
+            RESULT=$(
+            # For some reason I can't specify border label for fzf-tmux
+                (get_current_sessions && get_common_directories) | fzf-tmux \
+                    --no-sort \
+                    --prompt "$PROMPT"\
+                    $FZF_TMUX_OPTS
+            )
+            ;;
+        detached)
+            RESULT=$(
+                (get_current_sessions && get_common_directories) | fzf \
+                    --no-sort \
+                    --prompt "$PROMPT" \
+            )
+            ;;
+    esac
+fi
+
+if [ "$RESULT" = "" ]; then # no result
+    exit 0
+else 
+    SESSION_NAME=$(basename "$RESULT" | tr ' .:' '_')
+    SESSION=$(tmux list-sessions -F '#S' | grep "^$SESSION_NAME$") # find selected session
+    if [ "$SESSION" = "" ]; then # session doesn't exist, create it
+        case $RUNTYPE in
+            attached)
+                tmux new-session -ds $SESSION_NAME -c $RESULT
+                ;;
+            detached)
+                tmux new-session -s $SESSION_NAME -c $RESULT
+                ;;
+        esac
+    else # session does exist, switch to it
+        case $RUNTYPE in
+            attached)
+                tmux switch-client -t "$SESSION"
+                ;;
+            detached)
+                tmux attach -t "$SESSION"
+                ;;
+        esac
+    fi
+fi
