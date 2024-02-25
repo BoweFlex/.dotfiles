@@ -1,5 +1,5 @@
 [submodule "nvim"]
-	path = nvim
+	path = nvim/.config/nvim
 	url = git@github.com:BoweFlex/nvim.git
 [submodule "Wallpapers"]
 	path = Wallpapers
