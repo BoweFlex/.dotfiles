@@ -102,13 +102,9 @@ source $ZSH/oh-my-zsh.sh
 source ~/.zsh_aliases
 
 # Kubectl auto completion and config
-source <(kubectl completion zsh)
-export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/config"
+# These are useful once it's set up, but my basic config isn't doing anything with kubectl
+#source <(kubectl completion zsh)
+#export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/config"
 
 # Add golang to PATH to allow go execution from anywhere
 export PATH=$PATH:/usr/local/go/bin
-# Same but for kustomize
-export PATH=$PATH:$HOME/go/bin/kustomize
-# WSS Ansible exports
-export ANSIBLE_STRATEGY=mitogen_linear 
-export ANSIBLE_STRATEGY_PLUGINS=/home/jbowe/python-venv/ansible2.12CM/lib/python3.10/site-packages/ansible_mitogen/plugins/strategy 
