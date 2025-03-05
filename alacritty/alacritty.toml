@@ -1,5 +1,3 @@
-title = "JBowe Alacritty"
-
 [cursor]
 style = "Block"
 unfocused_hollow = true
