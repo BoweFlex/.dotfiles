@@ -108,3 +108,6 @@ source ~/.zsh_aliases
 
 # Add golang to PATH to allow go execution from anywhere
 export PATH=$PATH:/usr/local/go/bin
+
+# Add ~/.local/bin to PATH to allow execution of user specific binaries
+export PATH=$PATH:~/.local/bin
