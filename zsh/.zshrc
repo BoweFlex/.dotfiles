@@ -111,3 +111,6 @@ export PATH=$PATH:/usr/local/go/bin
 
 # Add ~/.local/bin to PATH to allow execution of user specific binaries
 export PATH=$PATH:~/.local/bin
+
+# Hook for direnv to pick up .envrc files
+eval "$(direnv hook zsh)"
