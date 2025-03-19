@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="ys"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -106,6 +106,8 @@ source ~/.zsh_aliases
 #source <(kubectl completion zsh)
 #export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/config"
 
+# Use helix as default editor, works for things like git editor
+export EDITOR=/usr/bin/hx
 # Add golang to PATH to allow go execution from anywhere
 export PATH=$PATH:/usr/local/go/bin
 
