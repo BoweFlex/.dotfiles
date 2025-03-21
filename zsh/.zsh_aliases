@@ -1,4 +1,7 @@
 alias jsession="~/.dotfiles/local-scripts/jbowe-sessionizer"
+alias gic="gc -m 'Initial Commit 🌱'"
+alias initial-commit-clipboard="printf 'Initial Commit 🌱' | xclip -selection clipboard"
+alias tableflip-clipboard="echo -n '(╯°□°)╯︵ ┻━┻' | xclip -selection clipboard"
 alias vim="vimpwd"
 function vimpwd () {
     if [[ $1 ]]; then
