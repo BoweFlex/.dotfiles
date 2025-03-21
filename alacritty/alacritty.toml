@@ -2,9 +2,6 @@
 style = "Block"
 unfocused_hollow = true
 
-[font.normal]
-family = "Hurmit Nerd Font"
-
 [bell]
 animation = "Ease"
 color = "0xf0f0f0"
