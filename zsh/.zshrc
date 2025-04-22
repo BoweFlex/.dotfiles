@@ -109,7 +109,7 @@ source ~/.zsh_aliases
 # Use helix as default editor, works for things like git editor
 export EDITOR=/usr/bin/hx
 # Add golang to PATH to allow go execution from anywhere
-export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
 # Add ~/.local/bin to PATH to allow execution of user specific binaries
 export PATH=$PATH:~/.local/bin

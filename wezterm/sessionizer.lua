@@ -21,7 +21,7 @@ M.toggle = function(window, pane)
 		fd,
 		"-HI",
 		"^.git$",
-		"--max-depth=4",
+		"--max-depth=6",
 		"--prune",
 		wezterm.home_dir -- .. "/boweflex"
 	})
