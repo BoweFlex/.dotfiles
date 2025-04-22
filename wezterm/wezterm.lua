@@ -15,7 +15,7 @@ config.default_gui_startup_args = {"connect", "unix"}
 
 -- Appearance
 config.color_scheme = 'Ashes (dark) (terminal.sexy)'
-config.window_background_opacity = 0.6
+config.window_background_opacity = 0.7
 
 config.hide_tab_bar_if_only_one_tab = false
 
