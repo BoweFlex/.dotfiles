@@ -51,5 +51,30 @@ S.toggle = function(window, pane)
 		pane
 	)
 end
+S.connect = function(window, pane)
+	-- Create action to accept input and create a workspace for the hostname provided
+	window:perform_action(
+		act.PromptInputLine({
+			description = "Enter the hostname you'd like to connect to.",
+			action = wezterm.action_callback(function(win, pane, line)
+				local host = "ssh " .. line
+				if workspace_exists(host) then
+					win:perform_action(act.SwitchToWorkspace {
+						name = host,
+					}, pane)
+				else
+					win:perform_action(act.SwitchToWorkspace {
+						name = host,
+						spawn = {
+							label = url,
+					    args = { "ssh", "-q", line },
+						},
+					}, pane)
+				end
+			end),
+		}),
+		pane
+	)
+end
 
 return S

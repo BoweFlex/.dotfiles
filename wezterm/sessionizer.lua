@@ -81,4 +81,38 @@ M.toggle = function(window, pane)
 	)
 end
 
+M.cheatsh = function(window, pane)
+  local workspace = "cheatsheet"
+	-- Create action to accept input and then open a new tab in the
+	-- "cheatsheet" workspace with the arg `curl cheat.sh/<input>`
+	window:perform_action(
+		act.PromptInputLine({
+			description = "Enter the command you would like a cheatsheet for, replacing ' ' with '-'.",
+			action = wezterm.action_callback(function(win, pane, line)
+				local cmd = "curl -s 'cheat.sh/" .. line .. "?T' | less"
+				if workspace_exists(workspace) then
+					win:perform_action(act.SwitchToWorkspace {
+						name = workspace,
+					}, pane)
+					wezterm.sleep_ms(25) -- needed for cheatsheet to open in correct workspace
+					-- Create another tab new cheatsheet open
+					win:perform_action(act.SpawnCommandInNewTab {
+						label = line,
+				    args = { "zsh", "-c", cmd },
+				  }, pane)
+				else
+					win:perform_action(act.SwitchToWorkspace {
+						name = workspace,
+						spawn = {
+							label = line,
+					    args = { "zsh", "-c", cmd },
+						},
+					}, pane)
+				end
+			end),
+		}),
+		pane
+	)
+end
+
 return M
