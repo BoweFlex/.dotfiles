@@ -13,11 +13,3 @@ For a package with a directory of files (i.e. wezterm) the target directory must
 
 For executable scripts, they should either be moved to your path (i.e. /usr/local/bin) or added to your path.
 
-## TODO
-
-- Install fd
-- Install Wezterm
-- Stow Wezterm
-- Install [terraform-ls](https://www.hashicorp.com/en/official-packaging-guide)
-- Install jsonnet-lanuage-server
-    - `sudo curl https://github.com/grafana/jsonnet-language-server/releases/download/v0.15.0/jsonnet-language-server_0.15.0_linux_amd64 -o /usr/local/bin/jsonnet-language-server && sudo chmod +x /usr/local/bin/jsonnet-language-server`
