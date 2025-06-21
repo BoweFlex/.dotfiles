@@ -68,7 +68,7 @@ M.toggle = function(window, pane)
 						-- Create another tab with Editor open
 						win:perform_action(act.SpawnCommandInNewTab {
 					    cwd = label,
-					    args = { "hx", "." },
+					    args = { "/usr/bin/zsh", "-ic", "nvim", "." },
 					  }, pane)
 					end
 				end
