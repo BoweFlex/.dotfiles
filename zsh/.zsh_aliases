@@ -2,6 +2,7 @@ alias jsession="~/.dotfiles/local-scripts/jbowe-sessionizer"
 alias gic="gc -m 'Initial Commit 🌱'"
 alias initial-commit-clipboard="printf 'Initial Commit 🌱' | xclip -selection clipboard"
 alias tableflip-clipboard="echo -n '(╯°□°)╯︵ ┻━┻' | xclip -selection clipboard"
+alias shrug-clipboard="echo -n '¯\_(ツ)_/¯' | xclip -selection clipboard"
 alias vim="vimpwd"
 function vimpwd () {
     if [[ $1 ]]; then
@@ -10,3 +11,4 @@ function vimpwd () {
         nvim .
     fi
 }
+alias badtouch='MIN=1000000000; MAX=$(date +%s); RAND_TIME=$(shuf -i $MIN-$MAX -n 1); touch -d "@$RAND_TIME"'
