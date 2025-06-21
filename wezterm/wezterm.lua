@@ -14,21 +14,50 @@ config.unix_domains = {{name = "unix"}}
 config.default_gui_startup_args = {"connect", "unix"}
 
 -- Appearance
-config.color_scheme = 'Ashes (dark) (terminal.sexy)'
-config.window_background_opacity = 0.7
+config.audible_bell = "Disabled"
+config.visual_bell = {
+  fade_in_function = 'EaseIn',
+  fade_in_duration_ms = 50,
+  fade_out_function = 'EaseOut',
+  fade_out_duration_ms = 50,
+}
+config.colors = {
+  visual_bell = '#404040',
+}
+config.window_decorations = "RESIZE"
+config.color_scheme = "Nord (Gogh)"
+config.window_background_opacity = 0.75
 
-config.hide_tab_bar_if_only_one_tab = false
+config.use_fancy_tab_bar = true
+config.tab_bar_at_bottom = true
+config.show_close_tab_button_in_tabs = false
+config.show_new_tab_button_in_tab_bar = false
+config.tab_max_width = 32
+
+config.window_frame = {
+  -- The font used in the tab bar.
+  -- Roboto Bold is the default; this font is bundled
+  -- with wezterm.
+  -- Whatever font is selected here, it will have the
+  -- main font setting appended to it to pick up any
+  -- fallback fonts you may have used there.
+  font = wezterm.font { family = 'Hurmit Nerd Font Mono' },
+
+  -- The size of the font in the tab bar.
+  -- Default to 10.0 on Windows but 12.0 on other systems
+  font_size = 12.0,
+}
 
 -- Keybinds
 config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
-  { key = "l", mods = "LEADER", action = act.ShowLauncher },
+  { key = "L", mods = "LEADER", action = act.ShowLauncher },
   { key = "f", mods = "LEADER", action = wezterm.action_callback(sessionizer.toggle) },
   { key = "c", mods = "LEADER", action = wezterm.action_callback(sessionizer.cheatsh) },
   { key = "s", mods = "LEADER", action = wezterm.action_callback(ssh_sessionizer.connect) },
   { key = "p", mods = "LEADER", action = act.ActivateTabRelative(-1) },
   { key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) },
-  { key = "N", mods = "LEADER", action = act.SpawnTab "CurrentPaneDomain" },
+  { key = "t", mods = "CTRL", action = act.SpawnTab "CurrentPaneDomain" },
   { key = "x", mods = "LEADER", action = act.ActivateCopyMode },
   { key = "Q", mods = "LEADER", action = act.QuitApplication },
   { key = "v", mods = "LEADER", action = act.SplitPane { direction = "Right" }, },
