@@ -107,7 +107,7 @@ source ~/.zsh_aliases
 #export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/config"
 
 # Use helix as default editor, works for things like git editor
-export EDITOR=/usr/bin/hx
+export EDITOR=/usr/bin/nvim
 # Add golang to PATH to allow go execution from anywhere
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 

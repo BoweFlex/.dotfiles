@@ -12,3 +12,5 @@ function vimpwd () {
     fi
 }
 alias badtouch='MIN=1000000000; MAX=$(date +%s); RAND_TIME=$(shuf -i $MIN-$MAX -n 1); touch -d "@$RAND_TIME"'
+
+alias zjstart="~/.config/zellij/plugins/zj-start"  # ALlows starting a Zellij session in a fuzzy found directory. Not expected to be used once inside Zellij but should still be safe to use.
