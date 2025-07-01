@@ -1,5 +1,6 @@
 [cursor]
 style = "Block"
+vi_mode_style = "Block"
 unfocused_hollow = true
 
 [bell]
@@ -10,6 +11,13 @@ duration = 10
 [window]
 opacity = 0.7
 startup_mode = "Maximized"
+decorations = "none"
 
 [mouse]
 hide_when_typing = true
+
+[keyboard]
+bindings = [
+    {key="v", mods="Control|Alt", mode="~Search", action="ToggleViMode"},
+    {key="Escape", mode="Vi", action="ToggleViMode"},
+]
