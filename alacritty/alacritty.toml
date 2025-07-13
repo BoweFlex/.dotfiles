@@ -1,3 +1,7 @@
+# Change colorscheme to Nord
+# Credit: https://github.com/nordtheme/alacritty
+general.import = ["~/.config/alacritty/nord.toml"]
+
 [cursor]
 style = "Block"
 vi_mode_style = "Block"
