@@ -1,68 +1,44 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-if [[ $TMUX ]]; then # inside tmux
-    RUNTYPE="attached"
-else # outside tmux, fzf-tmux not an option
-    RUNTYPE="detached"
+tmux_running=$(pgrep tmux)
+# fzf-tmux requires tmux to be running
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s launcher -c $HOME;
 fi
-
-get_current_sessions() {
-    tmux list-sessions -F '#{session_last_attached} #{session_name}' | sort --numeric-sort --reverse | awk '{print $2}'
-}
-
-get_common_directories() {
-    find ~/ ~/boweflex ~/.local -mindepth 1 -maxdepth 1 -type d
-}
-
-BORDER_LABEL="JBOWE SESSION FINDER"
-PROMPT=" "
 
 if [[ $# -eq 1 ]]; then
-    RESULT=$1
+    selected=$1
 else
-    case $RUNTYPE in
-        attached)
-            FZF_TMUX_OPTS="-p 53%,58%"
-            RESULT=$(
-            # For some reason I can't specify border label for fzf-tmux
-                (get_current_sessions && get_common_directories) | fzf-tmux \
-                    --no-sort \
-                    --prompt "$PROMPT"\
-                    $FZF_TMUX_OPTS
-            )
-            ;;
-        detached)
-            RESULT=$(
-                (get_current_sessions && get_common_directories) | fzf \
-                    --no-sort \
-                    --prompt "$PROMPT" \
-            )
-            ;;
-    esac
+    fzf_tmux_opts="-p 53%,58%"
+    prompt=" "
+    selected=$(fd --type d --no-ignore --hidden --no-ignore-vcs '^.git$' \
+        --exclude '.local*' --exclude '.config*' $HOME | \
+        xargs -I{} echo "{}" | sed -re 's|\.git.*||g' | fzf-tmux \
+            --no-sort \
+            --prompt "$prompt"\
+            $fzf_tmux_opts
+    )
+    selected="${selected%/}"
 fi
 
-if [ "$RESULT" = "" ]; then # no result
+if [[ -z $selected ]]; then
     exit 0
-else 
-    SESSION_NAME=$(basename "$RESULT" | tr ' .:' '_')
-    SESSION=$(tmux list-sessions -F '#S' | grep "^$SESSION_NAME$") # find selected session
-    if [ "$SESSION" = "" ]; then # session doesn't exist, create it
-        case $RUNTYPE in
-            attached)
-                tmux new-session -ds $SESSION_NAME -c $RESULT
-                ;;
-            detached)
-                tmux new-session -s $SESSION_NAME -c $RESULT
-                ;;
-        esac
-    else # session does exist, switch to it
-        case $RUNTYPE in
-            attached)
-                tmux switch-client -t "$SESSION"
-                ;;
-            detached)
-                tmux attach -t "$SESSION"
-                ;;
-        esac
-    fi
 fi
+
+# 4 is the number returned by awk for a directory inside $HOME, i.e. /home/jbowe/dotfiles.
+if [[ $(echo "$selected" | awk -F '/' '{print NF}') -le 5 ]]; then
+    selected_name=$(basename "$selected" | tr . _)
+else
+    # If not directly within home directory, we want the last two directories for session name
+    # to ensure directories with the same name but different parents can be kept separate.
+    selected_name=$(echo "$selected" | rev | cut -d "/" -f 1,2,3 | rev | tr . _)
+fi
+
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux new-session -ds $selected_name -n "Neovim BTW" -c $selected \; \
+        send-keys -t $selected_name:"Neovim BTW" "nvim ." C-m \; \
+        new-window -t $selected_name -n Terminal -c $selected \; \
+        split-window -h -t $selected_name:Terminal -c $selected -p 33;
+fi
+
+tmux switch-client -t $selected_name
