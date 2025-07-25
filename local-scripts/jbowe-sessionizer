@@ -9,7 +9,7 @@ fi
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    fzf_tmux_opts="-p 53%,58%"
+    fzf_tmux_opts="-p 60%,60%"
     prompt=" "
     selected=$(fd --type d --no-ignore --hidden --no-ignore-vcs '^.git$' \
         --exclude '.local*' --exclude '.config*' $HOME | \
@@ -26,19 +26,19 @@ if [[ -z $selected ]]; then
 fi
 
 # 4 is the number returned by awk for a directory inside $HOME, i.e. /home/jbowe/dotfiles.
-if [[ $(echo "$selected" | awk -F '/' '{print NF}') -le 5 ]]; then
+if [[ $(echo "$selected" | awk -F '/' '{print NF}') -le 4 ]]; then
     selected_name=$(basename "$selected" | tr . _)
 else
     # If not directly within home directory, we want the last two directories for session name
     # to ensure directories with the same name but different parents can be kept separate.
-    selected_name=$(echo "$selected" | rev | cut -d "/" -f 1,2,3 | rev | tr . _)
+    selected_name=$(echo "$selected" | rev | cut -d "/" -f 1,2 | rev | tr . _)
 fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -n "Neovim BTW" -c $selected \; \
-        send-keys -t $selected_name:"Neovim BTW" "nvim ." C-m \; \
-        new-window -t $selected_name -n Terminal -c $selected \; \
-        split-window -h -t $selected_name:Terminal -c $selected -p 33;
+    tmux new-session -ds $selected_name -n Terminal -c $selected \; \
+        split-window -h -t $selected_name:Terminal -c $selected -p 33 \; \
+        new-window -t $selected_name -n "Neovim BTW" -c $selected \; \
+        send-keys -t $selected_name:"Neovim BTW" "nvim ." C-m;
 fi
 
 tmux switch-client -t $selected_name
