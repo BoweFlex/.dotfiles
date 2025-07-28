@@ -36,7 +36,7 @@ fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
     tmux new-session -ds $selected_name -n Terminal -c $selected \; \
-        split-window -h -t $selected_name:Terminal -c $selected -p 33 \; \
+        split-window -h -t $selected_name:Terminal -c $selected -l "33%" \; \
         new-window -t $selected_name -n "Neovim BTW" -c $selected \; \
         send-keys -t $selected_name:"Neovim BTW" "nvim ." C-m;
 fi
